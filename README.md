@@ -17,5 +17,8 @@ Standardized mortality ratio (SMR) is a calculation that compares the number of
 
 # Practice in R
 
-# Reference
 
+
+# Reference
++ https://www.openepi.com/PDFDocs/SMRDoc.pdf
++ https://www.cdc.gov/nchs/nvss/deaths.htm
