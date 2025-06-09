@@ -1922,12 +1922,13 @@ getSMROutput &lt;- function(col=c(&#39;allcause&#39;,&#39;sncause&#39;,&#39;smnc
   
 }</code></pre>
 </div>
-<div id="data-example" class="section level2">
-<h2>Data Example</h2>
+</div>
+<div id="data-example" class="section level1">
+<h1>Data Example</h1>
 <p>We will read in a sample data and demonstrate the usage of the
 function to achieve the SMR results for all-cause mortality.</p>
-<div id="step-1-load-study-data-one-record-per-person" class="section level3">
-<h3>Step 1: Load Study Data (one record per person)</h3>
+<div id="step-1-load-study-data-one-record-per-person" class="section level2">
+<h2>Step 1: Load Study Data (one record per person)</h2>
 <pre class="r"><code># Required columns:
 #   ID: subject id
 #   D_BIRTH: birth date
@@ -1950,9 +1951,9 @@ mydt &lt;- read.csv(&#39;Data/sampleDT.csv&#39;) %&gt;%
   ) %&gt;%
   ungroup()</code></pre>
 </div>
-<div id="step-2-calculate-person-years-for-each-subject-see-getpersonyear.r-for-function-details" class="section level3">
-<h3>Step 2: Calculate person-years for each subject (see getPersonYear.R
-for function details)</h3>
+<div id="step-2-calculate-person-years-for-each-subject-see-getpersonyear.r-for-function-details" class="section level2">
+<h2>Step 2: Calculate person-years for each subject (see getPersonYear.R
+for function details)</h2>
 <p>We can specify the subject ID, sex, birth date, start date and end
 date to <em>getPersonYear</em> function.</p>
 <pre class="r"><code>mydt.py &lt;- getPersonYear(
@@ -1975,23 +1976,23 @@ date to <em>getPersonYear</em> function.</p>
 ## 5     1     2 1962-04-30 1982-12-02 2021-12-31     1984 6                2
 ## # ℹ 2 more variables: pyear &lt;dbl&gt;, agey &lt;dbl&gt;</code></pre>
 </div>
-<div id="step-3-load-cdc-reference-rates-and-merge-with-person-year-data" class="section level3">
-<h3>Step 3: Load CDC reference rates and merge with person-year
-data</h3>
+<div id="step-3-load-cdc-reference-rates-and-merge-with-person-year-data" class="section level2">
+<h2>Step 3: Load CDC reference rates and merge with person-year
+data</h2>
 <pre class="r"><code>CDC.1975.2022 &lt;- read.csv(&#39;CDC/CDC1975_2022.csv&#39;) # CDC rates per 1000 persons (collected and derived by Grace Zhou on 2024-09-30)
 CDC_PY &lt;- merge(mydt.py, CDC.1975.2022, by = c(&#39;agecat_cdc&#39;, &#39;sex_cdc&#39;, &#39;year_cdc&#39;))</code></pre>
 </div>
-<div id="step-4-get-smr-estimate-for-all-cause-mortality" class="section level3">
-<h3>Step 4: Get SMR estimate for all-cause mortality</h3>
+<div id="step-4-get-smr-estimate-for-all-cause-mortality" class="section level2">
+<h2>Step 4: Get SMR estimate for all-cause mortality</h2>
 <pre class="r"><code>all.cause &lt;- getSMROutput(&#39;allcause&#39;, dcat_value=NULL)
 all.cause </code></pre>
 <pre><code>## # A tibble: 1 × 7
 ##   MORTALITY EXP_NUM OBS_NUM   SMR `95% LCI` `95% UCI` `p-value (two.sided)`
 ##   &lt;chr&gt;       &lt;dbl&gt;   &lt;int&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                
-## 1 All-cause    34.2     211  6.16      5.36      7.05 &lt; 1e-04</code></pre>
+## 1 All-cause    34.2     211  6.16      5.36      7.05 &lt; 0.05</code></pre>
 </div>
-<div id="step-5-get-smr-estimates-for-multiple-death-causes" class="section level3">
-<h3>Step 5: Get SMR estimates for multiple death causes</h3>
+<div id="step-5-get-smr-estimates-for-multiple-death-causes" class="section level2">
+<h2>Step 5: Get SMR estimates for multiple death causes</h2>
 <pre class="r"><code>sn.cause   &lt;- getSMROutput(&#39;sncause&#39;,   &#39;Subsequent~neoplasm&#39;)
 card.cause &lt;- getSMROutput(&#39;cardcause&#39;, &#39;Cardiac~causes&#39;)
 pul.cause  &lt;- getSMROutput(&#39;pulcause&#39;,  &#39;Pulmonary~causes&#39;)
@@ -2005,12 +2006,12 @@ output</code></pre>
 <pre><code>## # A tibble: 6 × 7
 ##   MORTALITY      EXP_NUM OBS_NUM   SMR `95% LCI` `95% UCI` `p-value (two.sided)`
 ##   &lt;chr&gt;            &lt;dbl&gt;   &lt;int&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                
-## 1 All-cause        34.2      211  6.16      5.36      7.05 &lt; 1e-04              
-## 2 Subsequent~ne…    5.74      53  9.24      6.92     12.1  &lt; 1e-04              
-## 3 Cardiac~causes    4.63      21  4.53      2.81      6.93 &lt; 1e-04              
-## 4 Pulmonary~cau…    1.27       3  2.36      0.6       6.43 0.1763               
-## 5 Other~causes      9.80      20  2.04      1.25      3.15 0.0057               
-## 6 External~caus…   12.8       16  1.25      0.71      2.03 0.4380</code></pre>
+## 1 All-cause        34.2      211  6.16      5.36      7.05 &lt; 0.05               
+## 2 Subsequent~ne…    5.74      53  9.24      6.92     12.1  &lt; 0.05               
+## 3 Cardiac~causes    4.63      21  4.53      2.81      6.93 &lt; 0.05               
+## 4 Pulmonary~cau…    1.27       3  2.36      0.6       6.43 0.17628              
+## 5 Other~causes      9.80      20  2.04      1.25      3.15 &lt; 0.05               
+## 6 External~caus…   12.8       16  1.25      0.71      2.03 0.43804</code></pre>
 <p>Based on the table, we conclude that the study cohort exhibits a 55%
 higher overall mortality compared to the general population, which is
 statistically significant. Notably, the SMR for subsequent
@@ -2020,7 +2021,6 @@ mortality shows an increased risk (SMR = 2.63), it is not statistically
 significant due to the small number of cases (n = 3). Mortality from
 external causes, such as accidents or suicides, appears comparable to
 that of the general population.</p>
-</div>
 </div>
 </div>
 <div id="conclusion" class="section level1">
