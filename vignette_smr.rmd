@@ -323,11 +323,11 @@ getSMROutput <- function(col=c('allcause','sncause','smncause','cardcause','pulc
 
 ```
 
-## Data Example
+# Data Example
 
 We will read in a sample data and demonstrate the usage of the function to achieve the SMR results for all-cause mortality.
 
-### Step 1: Load Study Data (one record per person)
+## Step 1: Load Study Data (one record per person)
 
 ```{r step1}
 
@@ -355,7 +355,7 @@ mydt <- read.csv('Data/sampleDT.csv') %>%
 
 ```
 
-### Step 2: Calculate person-years for each subject (see getPersonYear.R for function details)
+## Step 2: Calculate person-years for each subject (see getPersonYear.R for function details)
 
 We can specify the subject ID, sex, birth date, start date and end date to *getPersonYear* function. 
 ```{r step2}
@@ -378,7 +378,7 @@ mydt.py %>% slice(1:5)
 
 ```
 
-### Step 3: Load CDC reference rates and merge with person-year data
+## Step 3: Load CDC reference rates and merge with person-year data
 
 ```{r step3}
 
@@ -387,7 +387,7 @@ CDC_PY <- merge(mydt.py, CDC.1975.2022, by = c('agecat_cdc', 'sex_cdc', 'year_cd
 
 ```
 
-### Step 4: Get SMR estimate for all-cause mortality
+## Step 4: Get SMR estimate for all-cause mortality
 
 ```{r step4}
 
@@ -396,7 +396,7 @@ all.cause
 
 ```
 
-### Step 5: Get SMR estimates for multiple death causes
+## Step 5: Get SMR estimates for multiple death causes
 
 ```{r step5}
 
