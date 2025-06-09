@@ -1776,7 +1776,13 @@ getPersonYear &lt;- function(id, sex, birth.date, start.date, end.date) {
 </div>
 <div id="getsmr" class="section level2">
 <h2>getSMR</h2>
-<pre class="r fold"><code># Function to calculate SMR and confidence intervals
+<pre class="r fold"><code>################################################################
+# Purpose: get SMR result
+# Author: Grace Zhou
+# Date: 2025-06-06
+# Reference: https://www.openepi.com/PDFDocs/SMRDoc.pdf
+################################################################
+# Function to calculate SMR and confidence intervals
 #&#39; getSMR
 #&#39;
 #&#39; Calculates the Standardized Mortality Ratio (SMR) and confidence intervals for observed and expected deaths.
@@ -1851,7 +1857,12 @@ getSMR &lt;- function(cause_label, obs.no, exp.no, digits = 2, conf.level = 0.95
   }
   
   # Format p-value for display
-  p_value_formatted &lt;- format.pval(result$p.value, eps = .05)
+  p_value_formatted &lt;- function(p, eps = .0001) {
+    ifelse(p &lt; eps, 
+           format.pval(p, digits = 4, eps = eps),  # Returns &quot;&lt;0.0001&quot;
+           format(round(p, 4), nsmall = 4))          # Returns &quot;0.1234&quot;
+  }
+    
   
   # Output as tibble for easy reporting
   tibble(
@@ -1861,7 +1872,7 @@ getSMR &lt;- function(cause_label, obs.no, exp.no, digits = 2, conf.level = 0.95
     SMR = unname(round(result$estimate, digits)),
     &quot;{conf.level * 100}% LCI&quot; := round(result$conf.int[1], digits),
     &quot;{conf.level * 100}% UCI&quot; := round(result$conf.int[2], digits),
-    &quot;p-value ({alternative})&quot; := p_value_formatted
+    &quot;p-value ({alternative})&quot; := p_value_formatted(result$p.value)
   )
 }</code></pre>
 </div>
@@ -1977,11 +1988,10 @@ all.cause </code></pre>
 <pre><code>## # A tibble: 1 × 7
 ##   MORTALITY EXP_NUM OBS_NUM   SMR `95% LCI` `95% UCI` `p-value (two.sided)`
 ##   &lt;chr&gt;       &lt;dbl&gt;   &lt;int&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                
-## 1 All-cause    34.2     211  6.16      5.36      7.05 &lt; 0.05</code></pre>
+## 1 All-cause    34.2     211  6.16      5.36      7.05 &lt; 1e-04</code></pre>
 </div>
-</div>
-<div id="step-5-get-smr-estimates-for-multiple-death-causes" class="section level2">
-<h2>Step 5: Get SMR estimates for multiple death causes</h2>
+<div id="step-5-get-smr-estimates-for-multiple-death-causes" class="section level3">
+<h3>Step 5: Get SMR estimates for multiple death causes</h3>
 <pre class="r"><code>sn.cause   &lt;- getSMROutput(&#39;sncause&#39;,   &#39;Subsequent~neoplasm&#39;)
 card.cause &lt;- getSMROutput(&#39;cardcause&#39;, &#39;Cardiac~causes&#39;)
 pul.cause  &lt;- getSMROutput(&#39;pulcause&#39;,  &#39;Pulmonary~causes&#39;)
@@ -1995,12 +2005,12 @@ output</code></pre>
 <pre><code>## # A tibble: 6 × 7
 ##   MORTALITY      EXP_NUM OBS_NUM   SMR `95% LCI` `95% UCI` `p-value (two.sided)`
 ##   &lt;chr&gt;            &lt;dbl&gt;   &lt;int&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                
-## 1 All-cause        34.2      211  6.16      5.36      7.05 &lt; 0.05               
-## 2 Subsequent~ne…    5.74      53  9.24      6.92     12.1  &lt; 0.05               
-## 3 Cardiac~causes    4.63      21  4.53      2.81      6.93 &lt; 0.05               
-## 4 Pulmonary~cau…    1.27       3  2.36      0.6       6.43 0.17628              
-## 5 Other~causes      9.80      20  2.04      1.25      3.15 &lt; 0.05               
-## 6 External~caus…   12.8       16  1.25      0.71      2.03 0.43804</code></pre>
+## 1 All-cause        34.2      211  6.16      5.36      7.05 &lt; 1e-04              
+## 2 Subsequent~ne…    5.74      53  9.24      6.92     12.1  &lt; 1e-04              
+## 3 Cardiac~causes    4.63      21  4.53      2.81      6.93 &lt; 1e-04              
+## 4 Pulmonary~cau…    1.27       3  2.36      0.6       6.43 0.1763               
+## 5 Other~causes      9.80      20  2.04      1.25      3.15 0.0057               
+## 6 External~caus…   12.8       16  1.25      0.71      2.03 0.4380</code></pre>
 <p>Based on the table, we conclude that the study cohort exhibits a 55%
 higher overall mortality compared to the general population, which is
 statistically significant. Notably, the SMR for subsequent
@@ -2010,6 +2020,7 @@ mortality shows an increased risk (SMR = 2.63), it is not statistically
 significant due to the small number of cases (n = 3). Mortality from
 external causes, such as accidents or suicides, appears comparable to
 that of the general population.</p>
+</div>
 </div>
 </div>
 <div id="conclusion" class="section level1">
