@@ -11,9 +11,9 @@
 
 <meta name="author" content="Grace Zhou" />
 
-<meta name="date" content="2025-06-06" />
+<meta name="date" content="2025-06-08" />
 
-<title>Tutorial of Standarized Mortality Ratio (SMR) in R</title>
+<title>Tutorial of Standardized Mortality Ratio (SMR) in R</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1585,10 +1585,10 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore">Tutorial of Standarized Mortality Ratio
+<h1 class="title toc-ignore">Tutorial of Standardized Mortality Ratio
 (SMR) in R</h1>
 <h4 class="author">Grace Zhou</h4>
-<h4 class="date">2025-06-06</h4>
+<h4 class="date">2025-06-08</h4>
 
 </div>
 
@@ -1953,8 +1953,8 @@ date to <em>getPersonYear</em> function.</p>
 )</code></pre>
 <p>The returned output is a data frame with additional columns: weight
 (pyear) and CDC age category (agecat_cdc).</p>
-<pre class="r"><code>head(mydt.py)</code></pre>
-<pre><code>## # A tibble: 6 × 10
+<pre class="r"><code>mydt.py %&gt;% slice(1:5)</code></pre>
+<pre><code>## # A tibble: 5 × 10
 ##      id   sex birth.date start.date end.date   year_cdc agecat_cdc sex_cdc
 ##   &lt;int&gt; &lt;int&gt; &lt;date&gt;     &lt;date&gt;     &lt;date&gt;        &lt;int&gt; &lt;fct&gt;        &lt;int&gt;
 ## 1     1     2 1962-04-30 1982-12-02 2021-12-31     1982 6                2
@@ -1962,7 +1962,6 @@ date to <em>getPersonYear</em> function.</p>
 ## 3     1     2 1962-04-30 1982-12-02 2021-12-31     1983 6                2
 ## 4     1     2 1962-04-30 1982-12-02 2021-12-31     1984 6                2
 ## 5     1     2 1962-04-30 1982-12-02 2021-12-31     1984 6                2
-## 6     1     2 1962-04-30 1982-12-02 2021-12-31     1985 6                2
 ## # ℹ 2 more variables: pyear &lt;dbl&gt;, agey &lt;dbl&gt;</code></pre>
 </div>
 <div id="step-3-load-cdc-reference-rates-and-merge-with-person-year-data" class="section level3">
